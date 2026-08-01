@@ -15,7 +15,17 @@ export async function runMigrations(): Promise<void> {
     `);
 
     const migrationsDir = path.join(__dirname, 'migrations');
-    const files = fs.readdirSync(migrationsDir)
+
+    // En production compilée (dist/), les SQL ne sont pas copiés par tsc.
+    // Fallback vers src/db/migrations si le dossier dist est vide ou inexistant.
+    let resolvedDir = migrationsDir;
+    if (!fs.existsSync(migrationsDir) || fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).length === 0) {
+      const srcDir = path.join(__dirname, '../../src/db/migrations');
+      if (fs.existsSync(srcDir)) {
+        resolvedDir = srcDir;
+      }
+    }
+    const files = fs.readdirSync(resolvedDir)
       .filter(f => f.endsWith('.sql'))
       .sort();
 
@@ -27,7 +37,7 @@ export async function runMigrations(): Promise<void> {
 
       if (rows.length === 0) {
         console.log(`Running migration: ${file}`);
-        const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
+        const sql = fs.readFileSync(path.join(resolvedDir, file), 'utf8');
         try {
           await client.query(sql);
           await client.query(
