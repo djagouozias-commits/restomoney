@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: resto-money-backend
+    runtime: node
+    rootDir: apps/backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      # Ces variables sont à renseigner manuellement dans le dashboard Render :
+      # DATABASE_URL, JWT_SECRET, JWT_REFRESH_SECRET, FRONTEND_URL
+      # ADMIN_EMAIL, ADMIN_PASSWORD

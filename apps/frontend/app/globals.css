@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-95;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-3 rounded-xl border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  /* ── Padding responsive pour les pages admin sur mobile ────────────── */
+  .admin-main {
+    @apply max-w-6xl mx-auto px-4 sm:px-8 py-6;
+  }
+  .table-scroll {
+    @apply overflow-x-auto -mx-4 px-4;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: none;
+  }
+
+  .table-scroll table {
+    @apply min-w-full;
+  }
+}
+
+@layer utilities {
+  /* Conteneur scrollable horizontalement au toucher */
+  .swipe-x {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+  }
+
+  /* Cache la scrollbar sur les zones de swipe */
+  .swipe-x::-webkit-scrollbar {
+    display: none;
+  }
+  .swipe-x {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
