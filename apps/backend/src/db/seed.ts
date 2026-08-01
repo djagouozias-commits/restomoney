@@ -10,8 +10,12 @@ export async function seedAdmin(): Promise<void> {
   const password = process.env.ADMIN_PASSWORD || 'Admin123!';
 
   const { rows } = await pool.query('SELECT id FROM admins WHERE email = $1', [email]);
+
   if (rows.length > 0) {
-    console.log(`[Seed] Admin déjà existant : ${email}`);
+    // Mettre à jour le mot de passe à chaque démarrage (pour permettre le reset via env)
+    const passwordHash = await bcrypt.hash(password, 12);
+    await pool.query('UPDATE admins SET password_hash = $1 WHERE email = $2', [passwordHash, email]);
+    console.log(`[Seed] Admin mis à jour : ${email}`);
     return;
   }
 
@@ -21,5 +25,5 @@ export async function seedAdmin(): Promise<void> {
     [email, passwordHash],
   );
 
-  console.log(`[Seed] ✓ Admin créé : ${email} / ${password}`);
+  console.log(`[Seed] ✓ Admin créé : ${email}`);
 }
