@@ -165,7 +165,7 @@ export const AuthService = {
       return this.generateTokenPair(session.entity_id, 'employe', structureId);
     }
 
-    return this.generateTokenPair(session.entity_id, session.entity_type);
+    return this.generateTokenPair(session.entity_id, session.entity_type as 'structure' | 'admin' | 'employe' | 'livreur');
   },
 
   async logout(entityId: string, entityType: string): Promise<void> {
