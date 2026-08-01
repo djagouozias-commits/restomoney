@@ -128,12 +128,18 @@ export const AuthService = {
   },
 
   async refreshToken(refreshToken: string): Promise<AuthTokens> {
-    const { rows } = await pool.query(
+    const { rows } = await pool.query<{
+      id: string;
+      entity_id: string;
+      entity_type: string;
+      refresh_token_hash: string;
+      expires_at: Date;
+    }>(
       'SELECT id, entity_id, entity_type, refresh_token_hash, expires_at FROM sessions WHERE expires_at > NOW()',
       []
     );
 
-    let session = null;
+    let session: typeof rows[0] | null = null;
     for (const row of rows) {
       const valid = await bcrypt.compare(refreshToken, row.refresh_token_hash);
       if (valid) {

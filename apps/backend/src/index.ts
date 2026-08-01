@@ -115,8 +115,8 @@ io.on('connection', (socket) => {
 
       // Broadcast to all admins in real time
       io.to('admin').emit('gps:update', {
-        livreur_id: userId,
         ...pos,
+        livreur_id: userId,
         timestamp: new Date().toISOString(),
       });
     });
